@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background: #018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+    }
+
+  </style>
+
+  <script>
+    const getHands = (name) => document.querySelector(`.${name}-hand`)
+    // 获取秒针元素
+    const secondHand = getHands('second');
+    // 获取分针元素
+    const minHand = getHands('min');
+    // 获取时针元素
+    const hourHand = getHands('hour');
+
+    function setDate() {
+      // 获取当前时间
+      const date = new Date();
+      // 获取当前秒数
+      const seconds = date.getSeconds();
+      // 计算当前秒数秒针旋转度数
+      const secondsDegrees = (((seconds / 60)) * 360) + 90;
+      // 改变秒针旋转度数
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+      // 获取当前分钟
+      const mins = date.getMinutes();
+      // 计算当前分针旋转度数
+      const minsDegrees = (((mins / 60)) * 360) + 90;
+      // 改变分针旋转度数
+      minHand.style.transform = `rotate(${minsDegrees}deg)`;
+      // 获取当前时
+      const hours = date.getHours();
+      /**
+       * 计算当前时针旋转度数
+       * 由于时针旋转度数较为特殊，在分针每走一分钟的时候，
+       * 时针会相应偏转(1/60)*((1/12)*360)度，也就是0.5度
+       */
+      const hourDegrees = ((hours / 12) * 360) + ((mins / 60) * (1 / 12) * 360) + 90;
+      // 改变时针旋转度数
+      hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+    }
+
+    setInterval(() => {
+      setDate()
+    }, 1000);
+
+  </script>
+</body>
+</html>
