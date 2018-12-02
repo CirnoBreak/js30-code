@@ -3,7 +3,7 @@
 1. 按下页面中对应键盘按键，会发出对应鼓的声音。
 2. 成功按下对应按键后，会有相应过渡效果。
 
-# 笔记
+# 关键步骤
 
 1. 通过document.addEventListener监听`按下任意按键`事件，并通过e.keyCode获取按下的按键对应的keyCode。
 ```javascript
