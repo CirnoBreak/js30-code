@@ -1,4 +1,4 @@
-# day2 - 用CSS + JS制作一个简易时钟
+# day2 - CSS + JS Clock 
 
 1. 使得时钟指针拥有过渡效果(CSS过渡效果)
 2. 通过JavaScript去改变时钟对应时针旋转度数。
