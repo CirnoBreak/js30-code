@@ -1,38 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+# day6 - Type Ahead
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
+实现一个搜索功能，可以根据输入内容查找到对应的信息，并把在输入框输入匹配的关键词在渲染的时候高亮。
+
+# 关键步骤
+
+1. 通过fetch api获取对应的数据,并存放到cities数组里。
+```javascript
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 let cities = [];
 // 获取数据
 fetch(endpoint)
   .then(blob => blob.json())
   .then(data => cities.push(...data))
-// 从数据里面筛选出匹配的
+```
+
+2. 编写从cities数组里面筛选出跟输入关键词匹配的数据的函数findMatches。
+```javascript
 function findMatches(wordToMatch, cities) {
   const regex = new RegExp(wordToMatch, 'gi');
   return cities.filter(place => {
     return place.city.match(regex) || place.state.match(regex);
   })
 }
-// 把数字变成千位计数
+```
+
+3. 编写把数字转成千位计数的字符串的函数findMatches。
+```javascript
 function numberWithComas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
-// 渲染匹配的数据
+```
+
+4. 编写渲染html的函数displayMatches，其中高亮的实现为:找到匹配的文字，替换为带有高亮class的span,并且其innerText为搜索框输入的内容。
+```javascript
+const suggestions = document.querySelector('.suggestions');
 function displayMatches() {
   const matchArray = findMatches(this.value, cities);
   const html = matchArray.map(place => {
@@ -49,14 +50,13 @@ function displayMatches() {
   }).join('');
   suggestions.innerHTML = html;
 }
+```
 
-// 获取输入框跟渲染数据部分元素
+5. 获取元素并监听变动。
+```javascript
 const searchInput = document.querySelector('.search');
-const suggestions = document.querySelector('.suggestions');
 
-// 监听数据变动及键盘输入事件，触发displayMatches
 searchInput.addEventListener('change', displayMatches);
 searchInput.addEventListener('keyup', displayMatches);
 </script>
-</body>
-</html>
+```
